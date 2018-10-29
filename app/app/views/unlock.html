@@ -1,0 +1,36 @@
+<div class="main">
+  <div class="no-container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="mainLogo">
+          <img class="logo" src="skin/images/logo.png" />
+          <div>
+            <h1>TezBox</h2>
+            <h2>{{translate("secure_tezos_wallet")}}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="row text-center">
+          <div class="col-md-12 mb-20">
+            <h3 class="sm-title">{{translate("welcome_back")}}</h3>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="exampleInputEmail1">{{translate('enter_password')}}</label>
+              <input autocomplete=false type="password" class="form-control" ng-model="password">
+            </div>
+          </div>
+          <div class="col-md-10 col-md-offset-1 mt-20">
+            <a ng-click="unlock()" class="btn btn-primary btn-block">{{translate('unlock_wallet')}}</a>
+          </div>
+          <div class="col-md-10 col-md-offset-1 mt-20">
+            <a ng-click="clear()">{{translate('clear_tezbox')}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

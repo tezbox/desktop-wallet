@@ -1,0 +1,36 @@
+<div class="main">
+  <div class="mainBgCover"></div>
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <span class="logo"><img class="logoSmall" src="skin/images/logo.png" /> TEZBOX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="med-container">
+    <h2 class="med-title">{{translate('tezbox_settings')}}</h2>
+    <div class="container-box">
+      <div class="row">
+        <div class="col-md-12">
+          <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('tezbox_settings_info')}}</strong></p>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>{{translate('rpc_address')}}</label>
+            <p>{{translate('rpc_address_info')}}</p>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" class="text-left form-control" ng-model="setting.rpc">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <a ng-click="save()" class="btn btn-primary btn-block">{{translate('back')}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

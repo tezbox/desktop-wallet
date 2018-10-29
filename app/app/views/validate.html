@@ -1,0 +1,40 @@
+<div class="main">
+  <div class="mainBgCover"></div>
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+            <span class="logo"><img class="logoSmall" src="skin/images/logo.png" /> TEZBOX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="med-container">
+    <h2 class="med-title">{{translate('validate_your_tezbox')}}</h2>
+    <div class="container-box">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1 mb-20">
+          <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate("validate_info")}}</strong></p>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+          <div class="form-group">
+            <label>{{translate('seed_words_mnenomic')}} <span style="color:red;">*</span></label>
+            <textarea rows=2 class="form-control" placeholder="{{translate('seed_words_mnenomic_placeholder')}}" ng-model="mnemonic"></textarea>
+          </div>
+          <div class="form-group">
+            <label>{{translate('optional_passphrase')}} <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('optional_passphrase_tooltip2')}}" tooltip></i></label>
+            <input type="password" class="form-control" ng-model="passphrase">
+          </div>
+        </div>
+      </div>
+      <div class="row mt-20">
+        <div class="col-md-4 col-md-offset-2">
+          <a ng-click="validate()" class="btn btn-primary btn-block">{{translate('create_tezbox')}}</a>
+        </div>
+        <div class="col-md-4">
+          <a ng-click="cancel()" class="btn btn-secondary btn-block">{{translate('cancel')}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

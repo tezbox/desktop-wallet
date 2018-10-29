@@ -1,0 +1,71 @@
+<div class="main">
+  <div class="mainBgCover"></div>
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+            <span class="logo"><img class="logoSmall" src="skin/images/logo.png" /> TEZBOX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="med-container">
+    <h2 class="med-title">{{translate('link_your_tezbox')}}</h2>
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="row text-center tabChoices">
+          <div class="col-md-4">
+            <a ng-click="type = 'ledger'" ng-class="type == 'ledger' ? 'selected' : ''">{{translate('ledger')}}</a>
+          </div>
+          <div class="col-md-4">
+            <a  ng-click="type = 'trezor'" ng-class="type == 'trezor' ? 'selected' : ''">{{translate('trezor')}}</a>
+          </div>
+          <!--<div class="col-md-4">
+            <a  ng-click="type = 'offline'" ng-class="type == 'offline' ? 'selected' : ''">{{translate('offline_signer')}}</a>
+          </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="container-box">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <div ng-show="type == 'ledger'" class="row text-center">
+            <div class="col-md-12">
+              <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('ledger_info')}}</strong></p>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+               <label class="text-center">{{translate('hd_derivation_path')}} <span style="color:red;">*</span></label>
+               <p>{{translate('hd_derivation_path_info')}}</p>
+               <input type="text" class="text-center form-control" ng-model="data">
+              </div>
+            </div>
+          </div>
+          <div ng-show="type == 'trezor'" class="row text-center">
+            <div class="col-md-12">
+              <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('trezor_coming_soon')}}</strong></p>
+            </div>
+          </div>
+          <div ng-show="type == 'offline'" class="row text-center">
+            <div class="col-md-12">
+              <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('offline_signer_info')}}</strong></p>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" class="text-center form-control" ng-model="address" placeholder="{{translate('address')}}">
+              </div>
+            </div>
+          </div>
+          <div ng-show="type == 'ledger'" class="row text-center mt-20">
+            <div class="col-md-6">
+              <a ng-click="link()" class="btn btn-primary btn-block">{{translate('link_tezbox')}}</a>
+            </div>
+            <div class="col-md-6">
+              <a ng-click="cancel()" class="btn btn-secondary btn-block">{{translate('cancel')}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

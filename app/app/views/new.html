@@ -1,0 +1,46 @@
+<div class="main">
+  <div class="no-container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="mainLogo">
+          <img class="logo" src="skin/images/logo.png" />
+          <div>
+            <h1>TezBox</h2>
+            <h2>{{translate("secure_tezos_wallet")}}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="setting.disclaimer">
+      <div  class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <a ng-click="create()" class="btn btn-primary btn-block">{{translate("create_tezbox")}}</a>
+        </div>
+      </div>
+      <div  class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <a ng-click="restore()" class="btn btn-secondary btn-block">{{translate("restore_tezbox")}}</a>
+        </div>
+      </div>
+      <div  class="row text-center mt-20">
+        <div class="col-md-10 col-md-offset-1">
+          <p>{{translate("link_hardware_wallet")}}<br /> <a ng-click="link()" class="">{{translate("link")}}</a></p>
+        </div>
+      </div>
+      <div  class="row text-center mt-50">
+        <div class="col-md-10 col-md-offset-1">
+          <a ng-click="unacceptDisclaimer()"><i class="fas fa-check-square"></i></a> <strong>I have Accepted the <a href="https://tezbox.com/terms.html" target="_blank">Terms</a> and <a href="https://tezbox.com/privacy.html" target="_blank">Privacy Policy</a></strong>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-hide="setting.disclaimer">
+      <div class="col-md-10 col-md-offset-1">
+        <p class="alert alert-danger"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate("warning")}}</p>
+        <p class="text-center"><strong>Please read and accept the <a href="https://tezbox.com/terms.html" target="_blank">Terms</a> and <a href="https://tezbox.com/privacy.html" target="_blank">Privacy Policy</a> to continue</strong></p>
+      </div>
+      <div class="col-md-6 col-md-offset-3 text-center mt-20">
+        <a ng-click="acceptDisclaimer()" class="btn btn-primary btn-block">{{translate("i_accept")}}</a>
+      </div>
+    </div>
+  </div>
+</div>
