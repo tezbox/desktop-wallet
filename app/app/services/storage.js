@@ -18,25 +18,25 @@ app.service('Storage', function() {
       });
     }
     r.setStore = function(v, k, p){
-        localStorage.setItem('tbstore', JSON.stringify(v));
         if (typeof k != 'undefined') r.keys = k;
+        return window.keytar.setPassword("tezbox", "tbstore", JSON.stringify(v));
     };
     r.loadStore = function(){
       return new Promise(function(resolve, reject){
-        if (r.loaded) resolve(r.ensk);
+        if (r.loaded) resolve(r.data.ensk);
         else {
-          r.loaded = true;
-          console.log("Loaded");
-          r.data = JSON.parse(localStorage.getItem('tbstore'));
-          resolve(r.ensk);
+          window.keytar.getPassword("tezbox", "tbstore").then(function(r){
+            r.loaded = true;
+            console.log("Loaded");
+            r.data = JSON.parse(r);
+            resolve(r.data.ensk);
+          });
         }
       });
     };
     r.clearStore = function(){
       r.keys = {};
-      var s = r.loadSetting();
-      localStorage.clear();
-      r.setSetting(s);
+      return window.keytar.deletePassword("tezbox", "tbstore");
     };
     r.setSetting = function(v){
       r.settings = v;
