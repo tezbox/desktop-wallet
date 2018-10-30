@@ -264,7 +264,8 @@
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <a ng-click="showPrivatekey()" class="btn btn-primary btn-small btn-block">{{translate('show')}}</a>
+                      <a ng-show="!privateKey" ng-click="showPrivatekey()" class="btn btn-primary btn-small btn-block">{{translate('show')}}</a>
+                      <a ng-show="privateKey" ng-click="privateKey = ''" class="btn btn-primary btn-small btn-block">{{translate('hide')}}</a>
                     </div>
                   </div>
                   <div class="row">

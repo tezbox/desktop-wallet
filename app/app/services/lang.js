@@ -66,6 +66,7 @@ app.service('Lang', ["$sce", function($sce) {
         "clear_tezbox" : "Clear TezBox",
         "back" : "Back",
         "show" : "Show",
+        "hide" : "Hide",
         "seed_words_mnenomic" : "Seed Words/Mnenomic (leave a space between each word)",
         "seed_words_mnenomic_placeholder" : "Enter Seed Words",
         "optional_passphrase" : "Optional Passphrase",

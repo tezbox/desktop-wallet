@@ -15,6 +15,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+	z-index: 100;
 }
 #loading-bar-spinner.spinner {
     left: 50%;
@@ -29,8 +30,8 @@
     width: 40px;
     height: 40px;
     border:  solid 4px transparent;
-    border-top-color:  #00C8B1 !important;
-    border-left-color: #00C8B1 !important;
+    border-top-color:  #EB1459 !important;
+    border-left-color: #EB1459 !important;
     border-radius: 50%;
 }
 @keyframes loading-bar-spinner {
@@ -153,6 +154,7 @@ a {
 .sweet-alert button {
   width: 200px!important;
   margin-top:0!important;
+	font-size: 14px!important;
 }
 .sweet-alert {
   border-radius: 15px!important;
