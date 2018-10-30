@@ -18,6 +18,7 @@ app.service('Storage', function() {
       });
     }
     r.setStore = function(v, k, p){
+        r.data = v;
         if (typeof k != 'undefined') r.keys = k;
         return window.keytar.setPassword("tezbox", "tbstore", JSON.stringify(v));
     };
@@ -25,17 +26,22 @@ app.service('Storage', function() {
       return new Promise(function(resolve, reject){
         if (r.loaded) resolve(r.data.ensk);
         else {
-          window.keytar.getPassword("tezbox", "tbstore").then(function(r){
+          window.keytar.getPassword("tezbox", "tbstore").then(function(dd){
             r.loaded = true;
-            console.log("Loaded");
-            r.data = JSON.parse(r);
-            resolve(r.data.ensk);
+            var dd = JSON.parse(dd);
+            if (dd){
+              r.data = dd;            
+              resolve(r.data.ensk);
+            } else {
+              resolve(false);
+            }
           });
         }
       });
     };
     r.clearStore = function(){
       r.keys = {};
+      r.data = false;
       return window.keytar.deletePassword("tezbox", "tbstore");
     };
     r.setSetting = function(v){
