@@ -12,6 +12,12 @@
     <title>TezBox - Wallet Application</title>
   <body>
     <div id="area" ng-view></div>
+    <div id="loadingSpinnerContainer">
+    <div class="bg"></div>
+    <div id="loading-bar-spinner" class="spinner"><div class="spinner-icon"></div></div>
+    </div>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>window.keytar = require('keytar');</script>
     <script src="skin/js/tezbox.js"></script>
     <script src="skin/js/eztz.min.js"></script>
     <script src="skin/js/ledger.xtz.js"></script>
@@ -31,9 +37,6 @@
     <script src="app/services/storage.js"></script>
     <script src="app/services/lang.js"></script>
     <script src="app/controllers.js"></script>
-    <div id="loadingSpinnerContainer">
-    <div class="bg"></div>
-    <div id="loading-bar-spinner" class="spinner"><div class="spinner-icon"></div></div>
-    </div>
+    <script>if (window.module) module = window.module;</script>
   </body>
 </html>

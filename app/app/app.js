@@ -9,7 +9,7 @@ var app = angular.module('popup', [
   $rootScope.translate = Lang.translate;
 })
 .config(function($routeProvider, $compileProvider) {
-  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension):/);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|file):/);
   $routeProvider
   .when("/new", {
     templateUrl : "app/views/new.html",
