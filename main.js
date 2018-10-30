@@ -9,7 +9,7 @@ const shell = require('electron').shell;
 
 let mainWindow
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 1200, height: 800, frame: true, useContentSize: true, icon : path.join(__dirname, 'app/icon.png'),webPreferences: {
+  mainWindow = new BrowserWindow({width: 1200, height: 900, frame: true, useContentSize: true, icon : path.join(__dirname, 'app/icon.png'),webPreferences: {
     devTools: true
   }})
   mainWindow.webContents.on('new-window', function(event, url){
