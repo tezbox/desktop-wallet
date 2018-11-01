@@ -2,7 +2,6 @@ const electron = require('electron')
 const {ipcMain} = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
-const keytar = require('keytar');
 const path = require('path')
 const url = require('url')
 const shell = require('electron').shell;

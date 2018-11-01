@@ -1,3 +1,5 @@
+var Store = require('electron-store');
+window.store = new Store();
 app.service('Storage', function() {
   var r = {};
   r.loaded = false;
@@ -17,17 +19,14 @@ app.service('Storage', function() {
     }
   }
   r.loadStore = function(){
-    var dd = JSON.parse(localStorage.getItem('tbstore'));
-    if (dd){
-      r.data = dd;            
-    }
+    r.data = window.store.get('tbstore', false);
     return r.data;
   };
   r.setStore = function(v, k, p){
-      r.data = v;
-      if (typeof k != 'undefined') r.keys = k;
-      if (typeof p != 'undefined') r.password = p;
-      localStorage.setItem('tbstore', JSON.stringify(v));
+    r.data = v;
+    if (typeof k != 'undefined') r.keys = k;
+    if (typeof p != 'undefined') r.password = p;
+    window.store.set('tbstore', v);
   };
   r.clearStore = function(){
     r.keys = {};
@@ -36,15 +35,15 @@ app.service('Storage', function() {
     r.ico = false;
     r.data = false;
     var s = r.settings;
-    localStorage.clear();
+    window.store.clear();
     r.setSetting(s);
   };
   r.setSetting = function(v){
     r.settings = v;
-    localStorage.setItem('tbsetting', JSON.stringify(v));
+    window.store.set('tbsetting', v);
   };
   r.loadSetting = function(){
-    r.settings = JSON.parse(localStorage.getItem('tbsetting'));
+    r.settings = window.store.get('tbsetting', false);
     return r.settings;
   };
   r.load();

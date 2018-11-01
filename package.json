@@ -56,7 +56,7 @@
     "@ledgerhq/hw-transport": "^4.24.0",
     "@ledgerhq/hw-transport-node-hid": "^4.24.0",
     "babel-runtime": "^6.26.0",
-    "keytar": "^4.3.0",
+    "electron-store": "^2.0.0",
     "usb": "^1.3.3"
   },
   "devDependencies": {
