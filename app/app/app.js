@@ -9,7 +9,7 @@ var app = angular.module('popup', [
   $rootScope.translate = Lang.translate;
 })
 .config(function($routeProvider, $compileProvider) {
-  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|file):/);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|moz-extension|file):/);
   $routeProvider
   .when("/new", {
     templateUrl : "app/views/new.html",
@@ -46,10 +46,6 @@ var app = angular.module('popup', [
   .when("/setting", {
     templateUrl : "app/views/setting.html",
     controller : "SettingController",
-  })
-  .when("/load", {
-    templateUrl : "app/views/load.html",
-    controller : "LoadController",
   })
   .otherwise({
     redirectTo: '/new'

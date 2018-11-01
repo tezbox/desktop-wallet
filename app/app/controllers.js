@@ -1,18 +1,6 @@
 app
-.controller('LoadController', ['$scope', '$location', 'Storage',  function($scope, $location, Storage,) {
-  Storage.load().then(function(){
-    $scope.$apply(function(){
-      if (Storage.data.ensk && typeof Storage.keys.sk != 'undefined'){
-        return $location.path('/main');
-      }  else if (Storage.data.ensk){
-        return $location.path('/unlock');
-      } else {
-        return $location.path('/new');
-      }
-    });
-  });
-}])
 .controller('NewController', ['$scope', '$location', 'Storage', 'Lang', function($scope, $location, Storage, Lang) {
+  
   var routeUser = function(){
     if (Storage.loaded && typeof Storage.keys.sk != 'undefined'){
         return $location.path('/main');
@@ -21,33 +9,28 @@ app
     }
   };
   
-  Storage.load().then(function(){
-    $scope.$apply(function(){
-      $scope.setting = Storage.settings;
-      if (!$scope.setting) {
-        $scope.setting = {
-          rpc : "https://rpc.tezrpc.me",
-          language : "english",
-          disclaimer : false
-        };
-        Storage.setSetting($scope.setting);
-      } else {
-        //Patch settings
-        var change = false;
-        if (typeof $scope.setting.language == 'undefined'){
-          $scope.setting.language = "english";
-          change = true;
-        }
-        Storage.setSetting($scope.setting);
-      }
-      window.eztz.node.setProvider($scope.setting.rpc);
-      Lang.setLang($scope.setting.language);
-      if ($scope.setting.disclaimer) {
-        routeUser();
-      }
-    });
-  });
-  
+  $scope.setting = Storage.settings;
+  if (!$scope.setting) {
+    $scope.setting = {
+      rpc : "https://rpc.tezrpc.me",
+      language : "english",
+      disclaimer : false
+    };
+    Storage.setSetting($scope.setting);
+  } else {
+    //Patch settings
+    var change = false;
+    if (typeof $scope.setting.language == 'undefined'){
+      $scope.setting.language = "english";
+      change = true;
+    }
+    Storage.setSetting($scope.setting);
+  }
+  window.eztz.node.setProvider($scope.setting.rpc);
+  Lang.setLang($scope.setting.language);
+  if ($scope.setting.disclaimer) {
+    routeUser();
+  }
   $scope.acceptDisclaimer = function(){
     $scope.setting.disclaimer = true;
     Storage.setSetting($scope.setting);
@@ -68,7 +51,6 @@ app
   };
 }])
 .controller('CreateController', ['$scope', '$location', 'Storage', '$sce', function($scope, $location, Storage, $sce) {
-  Storage.load();
   $scope.passphrase = '';
   $scope.mnemonic = '';
   
@@ -97,7 +79,6 @@ app
   $scope.newMnemonic();
 }])
 .controller('ValidateController', ['$scope', '$location', 'Storage', '$sce', 'SweetAlert', 'Lang', function($scope, $location, Storage, $sce, SweetAlert, Lang) {
-  if (!Storage.loaded) return $location.path('/create');
   var ss = Storage.data;
   if (Storage.data.ensk && typeof Storage.keys.sk != 'undefined'){
     return $location.path('/main');
@@ -122,7 +103,6 @@ app
   };
 }])
 .controller('MainController', ['$scope', '$location', '$http', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, $http, Storage, SweetAlert, Lang) {
-  if (!Storage.loaded) return $location.path('/load');
   var ss = Storage.data;
   if (!ss || !ss.ensk || typeof Storage.keys.sk == 'undefined'){
      return $location.path('/new');
@@ -704,7 +684,6 @@ app
 	}, 20000);
 }])
 .controller('SettingController', ['$scope', '$location', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, Storage, SweetAlert, Lang) {
-  if (!Storage.loaded) return $location.path('/load');
   $scope.setting = Storage.settings;
   
   $scope.save = function(){
@@ -715,7 +694,6 @@ app
   
 }])
 .controller('UnlockController', ['$scope', '$location', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, Storage, SweetAlert, Lang) {
-  if (!Storage.loaded) return $location.path('/load');
   var ss = Storage.data;
   $scope.password = '';
   $scope.clear = function(){
@@ -764,7 +742,6 @@ app
   };
 }])
 .controller('EncryptController', ['$scope', '$location', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, Storage, SweetAlert, Lang) {
-  if (!Storage.loaded) return $location.path('/load');
   var ss = Storage.data;
   if (typeof Storage.keys.sk == 'undefined') return $location.path('/new');
   $scope.password = '';
@@ -806,7 +783,6 @@ app
   
 }])
 .controller('LinkController', ['$scope', '$location', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, Storage, SweetAlert, Lang) {
-	if (!Storage.loaded) return $location.path('/load');
   $scope.type = 'ledger'; //ledger/trezor/offline
   $scope.address = '';
   $scope.data = "44'/1729'/0'/0'";
@@ -867,7 +843,6 @@ app
   };
 }])
 .controller('RestoreController', ['$scope', '$location', 'Storage', 'SweetAlert', 'Lang', function($scope, $location, Storage, SweetAlert, Lang) {
-	if (!Storage.loaded) return $location.path('/load');
   $scope.type = 'ico';
   $scope.seed = '';
   $scope.passphrase = '';

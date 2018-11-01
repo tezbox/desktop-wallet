@@ -391,6 +391,12 @@ position: absolute;
   margin-top:0;
   color: #EB1459;
   text-transform: uppercase;
+  margin-top: 0;
+  color: #EB1459;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 39px;
 }
 h1.balance >a{
   font-size: 20px;
@@ -440,7 +446,7 @@ h1.balance{
   left:0;
   right:0;
   bottom:0;
-  min-width: 1200px!important;
+  min-width: 1024px!important;
 }
 .mainBgCover{
   position: absolute;
@@ -465,7 +471,7 @@ h1.balance{
 }
 .lrg-container {
   width: 1000px!important;
-  margin-top: 150px!important;
+  margin-top: 120px!important;
 }
 .container-box {
   background-color: #fff!important;
@@ -518,7 +524,7 @@ h2.med-title {
   color: #EB1459;
   font-weight: bold;
   text-align: center;
-  margin-bottom:50px;
+  margin-bottom:30px;
   font-size: 40px;
 }
 

@@ -104,7 +104,7 @@
               </div>
               <div role="tabpanel" class="tab-pane" id="send">
                 <div class="row">
-                  <div class="col-md-8">
+                  <div class="col-lg-8 col-md-12">
                     <div class="form-group">
                       <label for="exampleInputEmail1">{{translate("destination_address")}} <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('destination_tooltip')}}" tooltip></i><a ng-show="accounts.length !== 0 && !showAccounts" style="position: absolute;right: 15px;cursor:pointer;" ng-click="toaddress = nextAddress(); showAccounts = true">{{translate("my_accounts")}}</a><a ng-show="accounts.length !== 0 && showAccounts" style="position: absolute;right: 15px;cursor:pointer;" ng-click="toaddress = ''; showAccounts = false;">{{translate("enter_address")}}</a></label>
                       <input ng-show="!showAccounts" type="text" class="form-control" ng-model="toaddress" placeholder="tz/KT1...">
@@ -115,13 +115,13 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-lg-4 col-md-6">
                     <div class="form-group">
                       <label for="exampleInputEmail1">{{translate("amount")}} ꜩ <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('amount_tooltip')}}" tooltip></i><a style="position: absolute;right: 15px;cursor:pointer;" ng-click="amount = max()">{{translate("max")}}</a></label>
                       <input type="number" class="form-control" ng-model="amount" >
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-lg-4 col-md-6">
                     <div class="form-group">
                       <label>{{translate("fee")}} mꜩ <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                       <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
@@ -135,14 +135,14 @@
                   </div>
                 </div>
                 <div class="row" style="margin-bottom:20px;">
-                  <div class="col-md-8">
+                  <div class="col-md-12 col-lg-8">
                     <a ng-click="advancedOptions = true" ng-show="!advancedOptions"><i class="fas fa-sliders-h"></i> {{translate("show_advanced_options")}} <i class="fas fa-arrow-down"></i></a>
                     <a ng-click="advancedOptions = false" ng-show="advancedOptions"><i class="fas fa-sliders-h"></i> {{translate("hide_advanced_options")}} <i class="fas fa-arrow-up"></i></a>
                   </div>
                 </div>
                 <div ng-show="advancedOptions" class="transition">
                   <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12 col-lg-8">
                       <div class="form-group">
                         <label for="exampleInputEmail1">{{translate("parameters")}} <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('parameters_tooltip')}}" tooltip></i></label>
                         <input type="text" class="form-control" placeholder="(optional)" ng-model="parameters" >
@@ -150,13 +150,13 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                       <div class="form-group">
                         <label for="exampleInputEmail1">{{translate("gas_limit")}} <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('gas_limit_tooltip')}}" tooltip></i></label>
                         <input type="number" class="form-control" ng-model="gas_limit" >
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                       <div class="form-group">
                         <label for="exampleInputEmail1">{{translate("storage_limit")}} <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('storage_limit_tooltip')}}" tooltip></i></label>
                         <input type="number" class="form-control" ng-model="storage_limit" >
@@ -165,10 +165,10 @@
                   </div>
                 </div>
                 <div class="row mt-20">
-                  <div class="col-md-3">
+                  <div class="col-md-4 col-lg-3">
                     <a ng-click="send()" class="btn btn-small btn-primary btn-block">{{translate("send")}}</a>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4 col-lg-3">
                     <a ng-click="clear()" class="btn btn-small btn-secondary btn-block">{{translate("clear")}}</a>
                   </div>
                 </div>
@@ -186,13 +186,13 @@
                   </div>
                 </div>
                 <div class="row" ng-show="account == 0">
-                  <div class="col-md-3" >
+                  <div class="col-md-4 col-lg-3" >
                     <a ng-click="add()" class="btn btn-primary btn-block">{{translate('add_account')}}</a>
                   </div>
                 </div>
                 <div ng-show="account > 0">
                   <div class="row mt-20">
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                       <div class="form-group">
                         <label>{{translate("delegate_options")}} <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('delegate_options_tooltip')}}" tooltip></i></label>
                         <select class="form-control" ng-model="delegateType">
@@ -205,7 +205,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                       <div class="form-group">
                         <label>{{translate("fee")}} <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                         <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
@@ -219,7 +219,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-4" ng-show="!delegateType">
+                    <div class="col-lg-4 col-md-6" ng-show="!delegateType">
                       <label>{{translate("custom_delegate")}} <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('custom_delegate_tooltip')}}" tooltip></i></label>
                       <div class="form-group" placeholder="tz">
                         <input type="text" class="form-control" ng-model="dd" >
@@ -227,7 +227,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-3" >
+                    <div class="col-md-4" >
                       <a ng-click="updateDelegate()" class="btn btn-small btn-primary btn-block">{{translate("update_delegate")}}</a>
                     </div>
                   </div>
@@ -240,12 +240,12 @@
                       <label>{{translate('title')}}</label>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-lg-4 col-md-6">
                     <div class="form-group">
                       <input type="text" class="form-control" ng-model="tt" >
                     </div>
                   </div>
-                  <div class="col-md-3" >
+                  <div class="col-md-4 col-lg-3" >
                     <a ng-click="saveTitle()" class="btn btn-small btn-primary btn-block">{{translate('update_title')}}</a>
                   </div>
                 </div>
@@ -258,12 +258,12 @@
                         <p ng-show="privateKey" class="display-privatekey"><strong>{{privateKey}}</strong></p>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                       <div class="form-group">
                         <input type="password" placeholder="{{translate('enter_password_to_show')}}" class="text-left form-control" ng-model="password">
                       </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-lg-3 col-md-4">
                       <a ng-show="!privateKey" ng-click="showPrivatekey()" class="btn btn-primary btn-small btn-block">{{translate('show')}}</a>
                       <a ng-show="privateKey" ng-click="privateKey = ''" class="btn btn-primary btn-small btn-block">{{translate('hide')}}</a>
                     </div>
@@ -275,12 +275,12 @@
                         <p>{{translate('import_kt1_account_msg')}} <a target="_blank" href="https://tzscan.io/{{accounts[account].address}}?default=origination">tzscan.io</a>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6">
                         <div class="form-group">
                           <input type="text" class="form-control" ng-model="kt1" placeholder="KT1...">
                         </div>
                     </div>
-                    <div class="col-md-3" >
+                    <div class="col-lg-3 col-md-4">
                       <a ng-click="import()" class="btn btn-small btn-primary btn-block">{{translate('import')}}</a>
                     </div>
                   </div>
@@ -293,7 +293,7 @@
                   </div>
                 </div>
                 <div class="row" ng-show="account > 0">
-                  <div class="col-md-3">
+                  <div class="col-lg-3 col-md-4">
                     <a ng-click="remove()" class="btn btn-small btn-primary btn-block">{{translate('remove_account')}}</a>
                   </div>
                 </div>
