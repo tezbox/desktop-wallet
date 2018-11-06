@@ -1,5 +1,5 @@
 let Transport = require("@ledgerhq/hw-transport-node-hid").default;
-let App = require("./hw-app-xtz").default;
+let App = require("./lib/Tezos.js").default;
 module.exports = {
 	getAddress : async (path) => {
 	  const transport = await Transport.create(60 * 1000);

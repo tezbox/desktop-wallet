@@ -1,0 +1,1 @@
+var teztrezor = require('./lib/trezor-tezos/index.js');
