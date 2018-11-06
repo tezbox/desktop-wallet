@@ -125,7 +125,7 @@ app.service('Lang', ["$sce", function($sce) {
         "ledger_verify_address" : "Please verify the address on your Ledger Nano S Device",
         "trezor_verify_address" : "Please verify the address on your Trezor T Device",
         "ledger_retreived_address" : "We have retreived the following address from your hardware wallet",
-        "ledger_error_connect" : "There was an issue connecting to your Ledger Nano S. Please ensure your device is connected, and the Tezos Wallet app is selected.",
+        "ledger_error_connect" : "There was an issue connecting to your hardware wallet. Please ensure your device is connected, and the Tezos Wallet app is selected.",
         "ledger_error_signing" : "There was an error signing this operation with your Ledger",
         "details_dont_match" : "Sorry, those details do not match - please try again, or go back and create a new account again",
         "please_enter_password" : "Please enter your password",

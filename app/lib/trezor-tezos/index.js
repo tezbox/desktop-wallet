@@ -20,11 +20,22 @@ var isReading;
 function openDevice(){
 	return new Promise(function(resolve, reject){
 		device = usb.findByIds(4617, 21441);
+    reject = function(e){throw e};
+    if (!device) reject("No device found");
 		device.open();
-		interface = device.interface(0);
+    
+    //Find interface - we want to connect to the first one hopefully
+    if (device.interfaces.length <= 0) reject("No interface found");
+    interface = device.interface(device.interfaces[0].id);
 		interface.claim();
-		inep = interface.endpoint(129);
-		outep = interface.endpoint(1);
+    
+    for(var i = 0; i < interface.endpoints.length; i++){
+      if (interface.endpoints[i].direction == 'in' && !inep) inep = interface.endpoint(interface.endpoints[i].address);
+      if (interface.endpoints[i].direction == 'out' && !outep) outep = interface.endpoint(interface.endpoints[i].address);
+      if (inep && outep) break;
+    }
+    if (!inep || !outep)  reject("Not enough endpoints found");
+    //Set up polling
 		inep.on("data", function(d){
 			if (d[0] != 63) return;
 			d = d.slice(1);
@@ -53,22 +64,28 @@ function openDevice(){
 		inep.on("error", function(e){
 			if (currentMessageErrorHandler) currentMessageErrorHandler(e)
 		});
-		inep.startPoll();
+    try{
+      inep.startPoll();
+    } catch(e){console.log(e)}
 		resolve();
 	});
 }
 
 function closeDevice(){
-	device.close();
-	device = false;
-	interface = false;
-	inep = false;
-	outep = false;
-	currentMessageData = false;
-	currentMessageId = false;
-	currentMessageLength = false;
-	currentMessageHandler = false;
-	currentMessageErrorHandler = false;
+  inep.stopPoll(function(){
+    interface.release(true, function(){
+      device.close();
+      device = false;
+      interface = false;
+      inep = false;
+      outep = false;
+      currentMessageData = false;
+      currentMessageId = false;
+      currentMessageLength = false;
+      currentMessageHandler = false;
+      currentMessageErrorHandler = false;
+    });
+  });
 }
 
 function load(){
@@ -82,7 +99,6 @@ function load(){
 		} else {
 			protobuf.load("lib/trezor-tezos/protob/trezor.tezos.proto", function(err, root) {
 				if (err){
-          console.log(err);
 					pbError = err;
 					isLoaded = true;
 					reject(err);
@@ -100,6 +116,7 @@ function recursiveAck(d){
 	if (typeof d.code != 'undefined' && d.code == 8){
 		return trezorQuery('acknowledge').then(recursiveAck);
 	} else {
+    closeDevice();
 		return d;
 	}
 }
@@ -137,11 +154,11 @@ module.exports = {
 								addressN : convertPath(path),
 								showDisplay : false,
 							}).then(function(d2){
+								closeDevice();
 								resolve({
 									address : d1.address,
 									publicKey : d2.publicKey
 								});
-								closeDevice();
 							}).catch(reject);
 						}).catch(reject);
 					}).catch(reject);

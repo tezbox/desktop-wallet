@@ -567,12 +567,11 @@ app
                   if (!c) cancelled = true;
                 });
                 var tops = eztz.trezor.operation(r);
-                console.log(tops);
                 return window.teztrezor.sign(Storage.keys.sk, eztz.utility.b58cdecode(r.opOb.branch, eztz.prefix.b), tops[0], tops[1]).then(function(rr){
                   r.opOb.signature = rr.signature;
                   return window.eztz.rpc.inject(r.opOb, eztz.utility.buf2hex(rr.sigOpContents));
                 }).catch(function(e){
-                if (cancelled) return;
+                  if (cancelled) return;
                   window.hideLoader();
                   SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('ledger_error_signing'), 'error')
                 });
@@ -937,6 +936,7 @@ app
     }).catch(function(e){
       if (cancelled) return;
       window.hideLoader();
+      console.log(e);
       SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('ledger_error_connect'), 'error');
     });    
   };
