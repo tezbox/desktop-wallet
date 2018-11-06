@@ -5,6 +5,7 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 const shell = require('electron').shell;
+const Menu = require('electron').Menu
 
 let mainWindow
 function createWindow () {
@@ -17,7 +18,7 @@ function createWindow () {
     frame: true, 
     title: "TezBox Wallet",
     useContentSize: true, 
-    icon : path.join(__dirname, 'app/icon.png'),
+    icon : path.join(__dirname, 'assets/icon.png'),
     webPreferences: {
       devTools: true
     }
@@ -26,14 +27,14 @@ function createWindow () {
     event.preventDefault();
     shell.openExternal(url);
   });
-  //mainWindow.setMenu(null);
   
   splash = new BrowserWindow({
     width: 400, 
     height: 300, 
     transparent : true,
     frame: false, 
-    alwaysOnTop: true
+    alwaysOnTop: true,
+    icon : path.join(__dirname, 'assets/icon.png')
   });
   splash.loadURL(url.format({
     pathname: path.join(__dirname, 'app/splash.html'),
@@ -55,7 +56,47 @@ function createWindow () {
     mainWindow = null
   })
 }
-app.on('ready', createWindow)
+function createMenu() {
+  const application = {
+    label: "Application",
+    submenu: [
+      {
+        label: "Quit",
+        accelerator: "CmdOrCtrl+Q",
+        click: () => {
+          app.quit()
+        }
+      }
+    ]
+  }
+
+  const edit = {
+    label: "Edit",
+    submenu: [
+      {
+        label: "Copy",
+        accelerator: "CmdOrCtrl+C",
+        selector: "copy:"
+      },
+      {
+        label: "Paste",
+        accelerator: "CmdOrCtrl+V",
+        selector: "paste:"
+      }
+    ]
+  }
+
+  const template = [
+    application,
+    edit
+  ]
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}
+app.on('ready',function(){
+  createWindow();
+  createMenu();
+});
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
