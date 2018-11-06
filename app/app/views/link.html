@@ -43,7 +43,14 @@
           </div>
           <div ng-show="type == 'trezor'" class="row text-center">
             <div class="col-md-12">
-              <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('trezor_coming_soon')}}</strong></p>
+              <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate('trezor_info')}}</strong></p>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+               <label class="text-center">{{translate('hd_derivation_path')}} <span style="color:red;">*</span></label>
+               <p>{{translate('hd_derivation_path_info')}}</p>
+               <input type="text" class="text-center form-control" ng-model="data">
+              </div>
             </div>
           </div>
           <div ng-show="type == 'offline'" class="row text-center">
@@ -56,7 +63,7 @@
               </div>
             </div>
           </div>
-          <div ng-show="type == 'ledger'" class="row text-center mt-20">
+          <div ng-show="type == 'ledger' || type == 'trezor'" class="row text-center mt-20">
             <div class="col-md-6">
               <a ng-click="link()" class="btn btn-primary btn-block">{{translate('link_tezbox')}}</a>
             </div>

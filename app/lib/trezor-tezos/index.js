@@ -81,8 +81,6 @@ function load(){
 			}
 		} else {
 			protobuf.load("lib/trezor-tezos/protob/trezor.tezos.proto", function(err, root) {
-        console.log('t1');
-        console.log(root);
 				if (err){
           console.log(err);
 					pbError = err;

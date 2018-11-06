@@ -1,1 +1,1 @@
-var tezledger = require('./ledger.node.xtz.js');
+var tezledger = require('./lib/ledger-tezos/index.js');

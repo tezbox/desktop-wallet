@@ -108,8 +108,7 @@ app
      return $location.path('/new');
   }
   if (typeof ss.temp != 'undefined') delete ss.temp;
-  $scope.type = "encrypted";
-  if (typeof Storage.keys.link != 'undefined' && Storage.keys.link) $scope.type = "ledger";
+  $scope.type = Storage.keys.type;
   var protos = {
     "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY" : "Betanet_v1",
     "ProtoALphaALphaALphaALphaALphaALphaALphaALphaDdp3zK" : "Zeronet",
@@ -375,6 +374,32 @@ app
               });
             break;
             case "trezor":
+              var cancelled = false;
+              op = op.then(function(r){
+                SweetAlert.swal({
+                  title: '',
+									imageUrl: "skin/images/trezor-logo.svg",
+                  text: Lang.translate('trezor_confirm_transaction'),
+                  showCancelButton: true,
+                  showConfirmButton: false,
+                }, function(c){
+                  if (!c) {
+										window.hideLoader();
+										cancelled = true;
+									}
+                });
+                var tops = eztz.trezor.operation(r);
+                return window.teztrezor.sign(Storage.keys.sk, eztz.utility.b58cdecode(r.opOb.branch, eztz.prefix.b), tops[0], tops[1]).then(function(rr){
+                  r.opOb.signature = rr.signature;
+                  return window.eztz.rpc.inject(r.opOb, eztz.utility.buf2hex(rr.sigOpContents));
+                });
+              }).catch(function(e){
+                console.log(e);
+                window.hideLoader();
+                if (cancelled) return;
+                SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('ledger_error_signing'), 'error')
+              });
+            break;
             case "offline":
             default:
               window.hideLoader();
@@ -530,6 +555,33 @@ app
               });
             break;
             case "trezor":
+              var cancelled = false;
+              op = op.then(function(r){
+                SweetAlert.swal({
+									title: '',
+									imageUrl: "skin/images/trezor-logo.svg",
+                  text: Lang.translate('trezor_confirm_transaction'),
+                  showCancelButton: true,
+                  showConfirmButton: false,
+                }, function(c){
+                  if (!c) cancelled = true;
+                });
+                var tops = eztz.trezor.operation(r);
+                console.log(tops);
+                return window.teztrezor.sign(Storage.keys.sk, eztz.utility.b58cdecode(r.opOb.branch, eztz.prefix.b), tops[0], tops[1]).then(function(rr){
+                  r.opOb.signature = rr.signature;
+                  return window.eztz.rpc.inject(r.opOb, eztz.utility.buf2hex(rr.sigOpContents));
+                }).catch(function(e){
+                if (cancelled) return;
+                  window.hideLoader();
+                  SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('ledger_error_signing'), 'error')
+                });
+              }).catch(function(e){
+                if (cancelled) return;
+                window.hideLoader();
+                SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('ledger_error_signing'), 'error')
+              });
+            break;
             case "offline":
             default:
               window.hideLoader();
@@ -614,6 +666,24 @@ app
             })
           break;
           case "trezor":
+            var cancelled = false;
+            op = op.then(function(r){
+              SweetAlert.swal({
+								title: '',
+								imageUrl: "skin/images/ledger-logo.svg",
+                text: Lang.translate('trezor_confirm_transaction'),
+                showCancelButton: true,
+                showConfirmButton: false,
+              }, function(c){
+                if (!c) cancelled = true;
+              });
+              var tops = eztz.trezor.operation(r);
+              return window.teztrezor.sign(Storage.keys.sk, eztz.utility.b58cdecode(r.opOb.branch, eztz.prefix.b), tops[0], tops[1]).then(function(rr){
+                r.opOb.signature = rr.signature;
+                return window.eztz.rpc.inject(r.opOb, eztz.utility.buf2hex(rr.sigOpContents));
+              });
+            })
+          break;
           case "offline":
           default:
             window.hideLoader();
@@ -831,7 +901,7 @@ app
       SweetAlert.swal({
         title: '',
         imageUrl: "skin/images/trezor-logo.svg",
-        text: Lang.translate('ledger_verify_address'),
+        text: Lang.translate('trezor_verify_address'),
         showCancelButton: true,
         showConfirmButton: false,
       }, function(c){
@@ -842,7 +912,7 @@ app
       });
       window.showLoader();
       var pp = window.teztrezor.getAddress($scope.data).then(function(r){
-        return window.eztz.utility.b58cencode(window.eztz.utility.hex2buf(r..payload.publicKey.substr(2)), window.eztz.prefix.edpk)
+        return r.publicKey;
       })
     }
     pp.then(function(pk){
@@ -861,6 +931,7 @@ app
           type : $scope.type
         });   
         window.hideLoader();
+        Storage.restored = true;
         return $location.path("/encrypt");
       });
     }).catch(function(e){
