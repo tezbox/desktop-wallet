@@ -1,7 +1,7 @@
 {
   "name": "tezbox-desktop",
   "version": "1.0.0",
-  "description": "",
+  "description": "TezBox is a multi-platform, decentralized and secure wallet for the Tezos blockchain",
   "main": "main.js",
   "scripts": {
     "start": "npm install && electron .",
@@ -20,6 +20,8 @@
       "package.json"
     ],
     "mac": {
+      "icon" : "assets/icon.png",
+      "target" : "dmg",
       "category": "public.app-category.productivity"
     },
     "dmg": {
@@ -43,13 +45,15 @@
       ]
     },
     "win": {
-      "target": "NSIS"
+      "target": "NSIS",
+      "icon" : "assets/icon.png"
     },
     "nsis": {
       "oneClick": true
     },
     "directories": {
-      "output": "releases"
+      "output": "releases/build",
+      "buildResources" : "assets"
     }
   },
   "dependencies": {
