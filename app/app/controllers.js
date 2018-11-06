@@ -66,7 +66,7 @@ app
   }
   $scope.create = function(){
     var keys = window.eztz.crypto.generateKeys($scope.mnemonic, $scope.passphrase);
-    keys = {sk : keys.sk, pk : keys.pk, pkh : keys.pkh};
+    keys = {sk : keys.sk, pk : keys.pk, pkh : keys.pkh, type : "encrypted"};
     var identity = {
       pkh : keys.pkh,
       accounts : [{title: "Main", address : keys.pkh, public_key : keys.pk}],
@@ -719,15 +719,27 @@ app
       $scope.$apply(function(){
         try {
           var sk = sjcl.decrypt(window.eztz.library.pbkdf2.pbkdf2Sync($scope.password, ss.pkh, 30000, 512, 'sha512').toString(), ss.ensk);
-          if (sk.substr(0,4) == "edsk") { 
-            var c = window.eztz.crypto.extractKeys(sk);
+          var type = sk.substr(0,4);
+					if (type == "edsk") { 
+						var c = window.eztz.crypto.extractKeys(sk);			
+						c.type = "encrypted";		
           } else {
-            var c = {
-              pk : ss.accounts[0].public_key,
-              pkh : ss.pkh,
-              sk : sk,
-              link : true
-            };
+						var c = {
+							pk : ss.accounts[0].public_key,
+							pkh : ss.pkh,
+							sk : sk.substr(4),
+						};
+						if (type == "ledg"){
+							c.type = "ledger";
+						} else if (type == "trez"){
+							c.type = "trezor";
+						} else if (type == "offl"){
+							c.type = "offline";
+						} else {
+							//Legacy
+							c.type = "ledger";
+							c.sk = sk;
+						}
           }
         } catch(err){
           window.hideLoader();
@@ -765,7 +777,7 @@ app
     setTimeout(function(){
       $scope.$apply(function(){
         var identity = {
-          ensk : sjcl.encrypt(window.eztz.library.pbkdf2.pbkdf2Sync($scope.password, Storage.keys.pkh, 30000, 512, 'sha512').toString(), Storage.keys.sk),
+          ensk : sjcl.encrypt(window.eztz.library.pbkdf2.pbkdf2Sync($scope.password, Storage.keys.pkh, 30000, 512, 'sha512').toString(), (Storage.keys.type == "encrypted" ? Storage.keys.sk : Storage.keys.type.substr(0,4) + Storage.keys.sk)),
           pkh : ss.pkh,
           accounts : ss.accounts,
           account : ss.account
@@ -815,6 +827,23 @@ app
       var pp = window.tezledger.getAddress($scope.data).then(function(r){
         return window.eztz.utility.b58cencode(window.eztz.utility.hex2buf(r.publicKey.substr(2)), window.eztz.prefix.edpk)
       })
+    } else if ($scope.type == 'trezor'){
+      SweetAlert.swal({
+        title: '',
+        imageUrl: "skin/images/trezor-logo.svg",
+        text: Lang.translate('ledger_verify_address'),
+        showCancelButton: true,
+        showConfirmButton: false,
+      }, function(c){
+        if (!c){
+          cancelled = true;
+          window.hideLoader();              
+        }
+      });
+      window.showLoader();
+      var pp = window.teztrezor.getAddress($scope.data).then(function(r){
+        return window.eztz.utility.b58cencode(window.eztz.utility.hex2buf(r..payload.publicKey.substr(2)), window.eztz.prefix.edpk)
+      })
     }
     pp.then(function(pk){
       $scope.$apply(function(){
@@ -829,9 +858,8 @@ app
           pk : pk,
           pkh : address,
           sk : $scope.data,
-          link : true
+          type : $scope.type
         });   
-        Storage.restored = true;
         window.hideLoader();
         return $location.path("/encrypt");
       });
@@ -859,7 +887,7 @@ app
     return ($scope.private_key.substring(0, 5) == "edesk");
   };
   var restoreEnd = function(keys){
-    var keys = {sk : keys.sk, pk : keys.pk, pkh : keys.pkh};
+    var keys = {sk : keys.sk, pk : keys.pk, pkh : keys.pkh, type : "encrypted"};
     var identity = {
       pkh : keys.pkh,
       accounts : [{title: "Main", address : keys.pkh, public_key : keys.pk}],
