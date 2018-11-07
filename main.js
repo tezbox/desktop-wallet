@@ -58,7 +58,7 @@ function createWindow () {
 }
 function createMenu() {
   const application = {
-    label: "Application",
+    label: "TezBox",
     submenu: [
       {
         label: "Quit",

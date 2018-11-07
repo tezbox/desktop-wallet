@@ -1,5 +1,6 @@
 var protobuf = require("protobufjs");
 var usb = require('usb');
+var prompt = require('electron-prompt');
 var device;
 var interface ;
 var inep;
@@ -38,7 +39,7 @@ function openDevice(){
     //Set up polling
 		inep.on("data", function(d){
 			if (d[0] != 63) return;
-			d = d.slice(1);
+      d = d.slice(1);
 			if (d[0] == 35 && d[1] == 35) {
 				currentMessageId = buf2int(d.slice(2, 4));
 				currentMessageLength = buf2int(d.slice(4, 8));
@@ -49,15 +50,53 @@ function openDevice(){
 				currentMessageData = Buffer.concat([currentMessageData, d]);
 				
 				if (currentMessageData.length >= currentMessageLength){
-					currentMessageData = currentMessageData.slice(0, currentMessageLength);
-					if (currentMessageHandler) {
-						currentMessageHandler(decodeProtobugMessage(currentMessageId, currentMessageData));
-					}
-					currentMessageData = false;
-					currentMessageId = false;
-					currentMessageLength = false;
-					currentMessageHandler = false;
-					currentMessageErrorHandler = false;
+          if (currentMessageId == 26){
+            trezorQuery("acknowledge", {}, true);
+            currentMessageData = false;
+            currentMessageId = false;
+            currentMessageLength = false;
+          } else if (currentMessageId == 41){
+            if (currentMessageData[1]){
+              trezorQuery("acknowledgePassphrase", {}, true);
+            } else {
+              prompt({
+                title: 'Enter Trezor Passphrase',
+                height: 150,
+                resizable : false,
+                label: 'Passphrase',
+                inputAttrs: {type: 'text', required: true},
+              })
+              .then((r) => {
+                if(r === null) {
+                  throw "No passphrase provided";
+                } else {
+                  trezorQuery("acknowledgePassphrase", {
+                    passphrase : r
+                  }, true);
+                }
+              }).catch(function(){
+                throw "Error with passphrase";
+              });
+            }
+            currentMessageData = false;
+            currentMessageId = false;
+            currentMessageLength = false;
+          } else if (currentMessageId == 77){
+            trezorQuery("acknowledgePassphraseState", {}, true);
+            currentMessageData = false;
+            currentMessageId = false;
+            currentMessageLength = false;
+          } else {
+            currentMessageData = currentMessageData.slice(0, currentMessageLength);
+            if (currentMessageHandler) {
+              currentMessageHandler(decodeProtobugMessage(currentMessageId, currentMessageData));
+            }
+            currentMessageData = false;
+            currentMessageId = false;
+            currentMessageLength = false;
+            currentMessageHandler = false;
+            currentMessageErrorHandler = false;
+          }
 				}
 			}
 		});
@@ -115,6 +154,8 @@ function load(){
 function recursiveAck(d){
 	if (typeof d.code != 'undefined' && d.code == 8){
 		return trezorQuery('acknowledge').then(recursiveAck);
+	} else if (typeof d.code != 'undefined' && d.code == 14){
+		return trezorQuery('acknowledge').then(recursiveAck);
 	} else {
     closeDevice();
 		return d;
@@ -135,7 +176,8 @@ module.exports = {
 					delete operation.type;
 					tx[type] = operation;
 					trezorQuery('tezosSignTx', tx).then(function(d){
-						recursiveAck(d).then(resolve);
+            closeDevice();
+            resolve(d);
 					}).catch(reject);
 				}).catch(reject);
 			}).catch(reject);
@@ -149,18 +191,16 @@ module.exports = {
 						addressN : convertPath(path),
 						showDisplay : true,
 					}).then(function(d){
-						trezorQuery('acknowledge').then(function(d1){	
-							trezorQuery('tezosGetPublicKey', {
-								addressN : convertPath(path),
-								showDisplay : false,
-							}).then(function(d2){
-								closeDevice();
-								resolve({
-									address : d1.address,
-									publicKey : d2.publicKey
-								});
-							}).catch(reject);
-						}).catch(reject);
+            trezorQuery('tezosGetPublicKey', {
+              addressN : convertPath(path),
+              showDisplay : false,
+            }).then(function(d1){
+              closeDevice();
+              resolve({
+                address : d.address,
+                publicKey : d1.publicKey
+              });
+            }).catch(reject);
 					}).catch(reject);
 				}).catch(reject);
 			}).catch(reject);
@@ -174,12 +214,18 @@ var trezToMsgid = {
   "tezosGetPublicKey" : 154,
   "tezosSignTx" : 152,	
   "acknowledge" : 27,
+  "acknowledgePassphrase" : 42,
+  "acknowledgePassphraseState" : 78,
 };
 var msgidToPb = {
   2 : "hw.trezor.messages.common.Success",
   3 : "hw.trezor.messages.common.Failure",
   26 : "hw.trezor.messages.common.ButtonRequest",
   27 : "hw.trezor.messages.common.ButtonAck",
+  41 : "hw.trezor.messages.common.PassphraseRequest",
+  42 : "hw.trezor.messages.common.PassphraseAck",
+  77 : "hw.trezor.messages.common.PassphraseStateRequest",
+  78 : "hw.trezor.messages.common.PassphraseStateAck",
   
   150 : "hw.trezor.messages.tezos.TezosGetAddress",
   151 : "hw.trezor.messages.tezos.TezosAddress",
@@ -197,10 +243,13 @@ function convertPath(p){
 	}
 	return r;
 }
-function trezorQuery(id, data){
+function trezorQuery(id, data, nocb){
+  nocb = nocb || false;
   return new Promise(function(resolve, reject){
-    currentMessageHandler = resolve;
-    currentMessageErrorHandler = reject;
+    if (!nocb){
+      currentMessageHandler = resolve;
+      currentMessageErrorHandler = reject;
+    }
     var packets = buildPackets(trezToMsgid[id], data || false);
     for(var i = 0; i < packets.length; i++){
       outep.transfer([63].concat(packets[i]), function(e){if (e) console.log("err", e)});
