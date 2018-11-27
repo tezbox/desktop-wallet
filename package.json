@@ -6,7 +6,9 @@
   "scripts": {
     "start": "npm install && electron .",
     "pack": "build --dir",
-    "dist": "build -mwl"
+    "dist-windows": "build -w",
+    "dist-mac": "build -m",
+    "dist-linux": "build -l"
   },
   "author": "TezTech",
   "license": "MIT",
