@@ -9,6 +9,7 @@ app.service('Lang', ["$sce", function($sce) {
     ],
     _translations = {
       "english" : {
+        "first_operation" : "This account hasn't been revealed yet, which means your next operation will incur an additional fee of 0.001150XTZ",
         "error_please_enter_your_seed_words" : "Please enter your seed words",
         "error_seed_words_not_valid" : "Your seed words are not valid - please check to ensure you are not missing a word/letter, and you haven't included an extra space/line break. All words must be seperated by a space.",
         "error_enter_passphrase" : "Please enter your passphrase",
@@ -125,7 +126,8 @@ app.service('Lang', ["$sce", function($sce) {
         "ledger_verify_address" : "Please verify the address on your Ledger Nano S Device",
         "trezor_verify_address" : "Please verify the address on your Trezor T Device",
         "ledger_retreived_address" : "We have retreived the following address from your hardware wallet",
-        "ledger_error_connect" : "There was an issue connecting to your hardware wallet. Please ensure your device is connected, and the Tezos Wallet app is selected.",
+        "ledger_error_connect" : "There was an issue connecting to your Ledger device. Please ensure your device is connected, and the Tezos Wallet app is selected.",
+        "trezor_error_connect" : "There was an issue connecting to your hardware wallet. Please ensure your device is connected, and you are running the latest firmware.",
         "ledger_error_signing" : "There was an error signing this operation with your Ledger",
         "details_dont_match" : "Sorry, those details do not match - please try again, or go back and create a new account again",
         "please_enter_password" : "Please enter your password",
@@ -192,12 +194,13 @@ app.service('Lang', ["$sce", function($sce) {
         "not_connected" : "Not Connected",        
         "remove_account_warning" : "You are about to remove this account from your wallet! (You can always restore this account in future by going to Options > Import)",
         "yes_remove_it" : "Yes, remove it!",
-        "originate_warning" : "Creating a new account incurs an origination fee of ~0.257 XTZ. Do you want to continue?)",
+        "originate_warning" : "Creating a new account incurs a fee of ~0.260XTZ. Do you want to continue?)",
         "yes_continue" : "Yes, continue!",
         "new_account_originated" : "Your new account has been originated - this may take a few minutes to be included on the blockchain",
         "origination_error" : "There was an error adding account. Please ensure your main account has funds available",
         "loading" : "Loading...",
         "copy_clipboard" : "The address has been copied to your clipboard",
+        "confirm" : "Confirm",
         "yes_send_it" : "Yes, send it!",
         "transaction_sent" : "Transaction has been sent - this may take a few minutes to be included on the blockchain",
         "operation_failed" : "Operation Failed!",
@@ -209,6 +212,8 @@ app.service('Lang', ["$sce", function($sce) {
         "yes_import_them" : "Yes, import them!",
         "ico_restore_success" : "You have successfully restored your ICO wallet. If you have just activated your account, please note that this may take some time to show.",
         "transaction_confirm_info" : "You are about to send $$XTZ to $$ - this transaction is irreversible",
+        "transaction_confirm_lowtz" : "You are sending to an empty implicity (tz) account - this will incur an additional fee of 0.257XTZ. Do you want to continue?",
+        "extra_fee" : "Additional fees!",
       }
 
     },

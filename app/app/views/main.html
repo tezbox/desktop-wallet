@@ -18,7 +18,7 @@
         <h3 style="">{{translate("my_accounts")}}</h3>
         <div class="accountsContainer">
           <ul class="myAccounts">
-            <li class="account" ng-repeat="a in accounts track by a.address"><a ng-click="loadAccount($index)"><blocky class="avatar" seed='{{a.address}}' size='8' scale='16'></blocky> {{a.title}}<span>{{a.address}}</span></a></li>
+            <li class="account" ng-repeat="a in accounts track by a.address"><a ng-click="loadAccount($index)"><blocky class="avatar" seed='{{getBlocky(a.address)}}' size='8' scale='16'></blocky> {{a.title}}<span>{{a.address}}</span></a></li>
             <li class="add" ><a style="padding-top: 8px!important;" ng-click="add()">{{translate("add_account")}} <i class="fa fa-plus" ></i></a></li>
           </ul>
         </div>
@@ -37,7 +37,7 @@
           <div class="col-md-6">
             <div class="addressDetails">
               <div class="blocky-container">
-                <blocky class="avatar" seed='{{accounts[account].address}}' size='8' scale='16'></blocky>
+                <blocky class="avatar" seed='{{getBlocky(accounts[account].address)}}' size='8' scale='16'></blocky>
               </div>
               <div class="accountOffline" ng-hide="accountLive"><i class="leftIcon fas fa-exclamation-circle"></i></div>
               <h1 class="mb-20">{{accounts[account].title}}</h1>
@@ -75,10 +75,10 @@
                     <div class="row">
                       <div class="col-md-4 text-center txLeft {{(tx.source != accounts[account].address ? 'received' : 'sent')}}">
                         <div ng-show="tx.source != accounts[account].address">
-                          <blocky class="avatar" seed='{{tx.source}}' size='8' scale='16'></blocky>
+                          <blocky class="avatar" seed='{{getBlocky(tx.source)}}' size='8' scale='16'></blocky>
                         </div>
                         <div ng-show="tx.source == accounts[account].address">
-                          <blocky class="avatar" seed='{{tx.destination}}' size='8' scale='16'></blocky>
+                          <blocky class="avatar" seed='{{getBlocky(tx.destination)}}' size='8' scale='16'></blocky>
                         </div>
                         <span ng-show="tx.source != accounts[account].address"><strong>{{translate("received")}}</strong></span>
                         <span ng-show="tx.source == accounts[account].address"><strong>{{translate("sent")}}</strong></span>
@@ -103,6 +103,11 @@
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="send">
+								<div class="row">
+                  <div class="col-md-12" ng-show="account == 0 && !isRevealed">
+                    <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate("first_operation")}}</strong></p>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-lg-8 col-md-12">
                     <div class="form-group">
@@ -123,13 +128,12 @@
                   </div>
                   <div class="col-lg-4 col-md-6">
                     <div class="form-group">
-                      <label>{{translate("fee")}} mꜩ <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
+                      <label>{{translate("fee")}} μꜩ <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                       <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
                       <select ng-show="!showCustom" class="form-control" ng-model="fee" number-select>
-                        <option value="0">{{translate("no_fee")}} - 0ꜩ</option>
-                        <option value="1">{{translate("low")}} - 1mꜩ</option>
-                        <option value="5">{{translate("medium")}} - 5mꜩ</option>
-                        <option value="50">{{translate("high")}} - 50mꜩ</option>
+                        <option value="1420">{{translate("low")}} - 1420μꜩ</option>
+                        <option value="2000">{{translate("medium")}} - 1500μꜩ</option>
+                        <option value="5000">{{translate("high")}} - 30000μꜩ</option>
                       </select>
                     </div>
                   </div>
@@ -198,23 +202,19 @@
                         <select class="form-control" ng-model="delegateType">
                           <option value="undelegated">Undelegated</option>
                           <option value="">Custom</option>
-                          <option value="tz1Tnjaxk6tbAeC2TmMApPh8UsrEVQvhHvx5">CryptoDelegate</option>
-                          <option value="tz1iZEKy4LaAjnTmn2RuGDf2iqdAQKnRi8kY">Tezzigator</option>
-                          <option value="tz1TDSmoZXwVevLTEvKCTHWpomG76oC9S2fJ">Tezos.Community</option>
-                          <option value="tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q">HappyTezos</option>
+                          <option ng-repeat="d in delegates.keys" value="{{d}}" ng-show="$index">{{delegates.names[$index]}}</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                       <div class="form-group">
-                        <label>{{translate("fee")}} <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
+                        <label>{{translate("fee")}} μꜩ<span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                         <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
                         <select ng-show="!showCustom" class="form-control" ng-model="fee" number-select>
-                          <option value="0">{{translate("no_fee")}} - 0ꜩ</option>
-                          <option value="1">{{translate("low")}} - 1mꜩ</option>
-                          <option value="5">{{translate("medium")}} - 5mꜩ</option>
-                          <option value="50">{{translate("high")}} - 50mꜩ</option>
-                        </select>
+                        <option value="1420">{{translate("low")}} - 1420μꜩ</option>
+                        <option value="2000">{{translate("medium")}} - 1500μꜩ</option>
+                        <option value="5000">{{translate("high")}} - 30000μꜩ</option>
+                      </select>
                       </div>
                     </div>
                   </div>

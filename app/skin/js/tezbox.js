@@ -24,3 +24,11 @@ if (window.clipboardData && window.clipboardData.setData) {
         document.body.removeChild(textarea);
     }
 }}
+function isJsonString(str) {
+	try {
+			j = JSON.parse(str);
+	} catch (e) {
+			return false;
+	}
+	return true;
+}
