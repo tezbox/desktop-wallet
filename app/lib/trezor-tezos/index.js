@@ -1,22 +1,9 @@
 var protobuf = require("protobufjs");
 var usb = require('usb');
 var prompt = require('electron-prompt');
-var device;
-var interface ;
-var inep;
-var outep;
-var pbroot;
-var currentMessageData;
-var currentMessageId;
-var currentMessageLength;
-var currentMessageHandler;
-var currentMessageErrorHandler;
-var isLoaded;
-var isLoadedFunction;
-var pbError;
-var isLoadedErrorFunction;
 
-var isReading;
+
+var device, interface, inep, outep, pbroot, currentMessageData, currentMessageId, currentMessageLength, currentMessageHandler, currentMessageErrorHandler, isLoaded, pbError;
 
 function openDevice(){
 	return new Promise(function(resolve, reject){
@@ -151,18 +138,7 @@ function load(){
 	});
 }
 
-function recursiveAck(d){
-	if (typeof d.code != 'undefined' && d.code == 8){
-		return trezorQuery('acknowledge').then(recursiveAck);
-	} else if (typeof d.code != 'undefined' && d.code == 14){
-		return trezorQuery('acknowledge').then(recursiveAck);
-	} else {
-    closeDevice();
-		return d;
-	}
-}
-
-module.exports = {
+tezFns = {
 	sign : function(path, branch, operation, revealOp){
 		return new Promise(function(resolve, reject){
 			openDevice().then(function(){
@@ -177,7 +153,8 @@ module.exports = {
 					tx[type] = operation;
 					trezorQuery('tezosSignTx', tx).then(function(d){
             closeDevice();
-            resolve(d);
+            if (typeof d.message != 'undefined' && d.message == 'Cancelled') reject('TREZOR_ERROR');
+            else resolve(d);
 					}).catch(reject);
 				}).catch(reject);
 			}).catch(reject);
@@ -208,7 +185,7 @@ module.exports = {
 	}
 }
 
-//helper
+//helper shared
 var trezToMsgid = {
   "tezosGetAddress" : 150,
   "tezosGetPublicKey" : 154,
@@ -234,7 +211,6 @@ var msgidToPb = {
   154 : "hw.trezor.messages.tezos.TezosGetPublicKey",
   155 : "hw.trezor.messages.tezos.TezosPublicKey",
 };
-
 function convertPath(p){
 	var ps = p.split('/');
 	var r = [];
@@ -242,19 +218,6 @@ function convertPath(p){
 		r.push((ps[i].indexOf("'") >= 0 ? (parseInt(ps[i]) | 0x80000000) >>> 0 : parseInt(ps[i])));
 	}
 	return r;
-}
-function trezorQuery(id, data, nocb){
-  nocb = nocb || false;
-  return new Promise(function(resolve, reject){
-    if (!nocb){
-      currentMessageHandler = resolve;
-      currentMessageErrorHandler = reject;
-    }
-    var packets = buildPackets(trezToMsgid[id], data || false);
-    for(var i = 0; i < packets.length; i++){
-      outep.transfer([63].concat(packets[i]), function(e){if (e) console.log("err", e)});
-    }
-  });
 }
 function buildPackets(id, data){
   data = encodeProtobugMessage(id, data || {});	
@@ -300,4 +263,20 @@ function toBytesInt32 (num) {
     (num & 0x0000ff00) >> 8,
     (num & 0x000000ff)
   ];
+}
+
+//node.js only
+module.exports = tezFns;
+function trezorQuery(id, data, nocb){
+  nocb = nocb || false;
+  return new Promise(function(resolve, reject){
+    if (!nocb){
+      currentMessageHandler = resolve;
+      currentMessageErrorHandler = reject;
+    }
+    var packets = buildPackets(trezToMsgid[id], data || false);
+    for(var i = 0; i < packets.length; i++){
+      outep.transfer([63].concat(packets[i]), function(e){if (e) console.log("err", e)});
+    }
+  });
 }
