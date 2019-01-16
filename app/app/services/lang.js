@@ -9,7 +9,7 @@ app.service('Lang', ["$sce", function($sce) {
     ],
     _translations = {
       "english" : {
-        "first_operation" : "This account hasn't been revealed yet, which means your next operation will incur an additional fee of 0.001150XTZ",
+        "first_operation" : "This account hasn't been revealed yet, which means your next operation will incur an additional fee of ~0.001300XTZ",
         "error_please_enter_your_seed_words" : "Please enter your seed words",
         "error_seed_words_not_valid" : "Your seed words are not valid - please check to ensure you are not missing a word/letter, and you haven't included an extra space/line break. All words must be seperated by a space.",
         "error_enter_passphrase" : "Please enter your passphrase",
