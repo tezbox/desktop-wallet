@@ -9,7 +9,7 @@ app.service('Lang', ["$sce", function($sce) {
     ],
     _translations = {
       "english" : {
-        "first_operation" : "This account hasn't been revealed yet, which means your next operation will incur an additional fee of ~0.001300XTZ",
+        "first_operation" : "This account hasn't been revealed yet - please use the Medium fee option (5000μꜩ)!",
         "error_please_enter_your_seed_words" : "Please enter your seed words",
         "error_seed_words_not_valid" : "Your seed words are not valid - please check to ensure you are not missing a word/letter, and you haven't included an extra space/line break. All words must be seperated by a space.",
         "error_enter_passphrase" : "Please enter your passphrase",
@@ -38,7 +38,7 @@ app.service('Lang', ["$sce", function($sce) {
         "error_valid_destinaton" : "Please enter a valid Destination Address",
         "error_send_self" : "You can't send to yourself - please select another Destination Address",
         "error_positive_amount" : "Invalid amount entered - please enter a positive number",
-        "error_amount_exceeds" : "The amount you entered exceeds the current balance for this account. Manager addresses (those that start with tz) must leave at least 0.000001 tez behind. You also need to take into account the fee you are using",
+        "error_amount_exceeds" : "The amount you entered exceeds the current balance for this account - you need to take into account the fee you are using",
         "error_positive_fee" : "Invalid fee entered - please enter a positive number",
         "error_invalid_amount" : "Invalid amount entered - please enter a valid number",
         "error_invalid_fee" : "Invalid fee entered - please enter a valid number",
@@ -194,7 +194,7 @@ app.service('Lang', ["$sce", function($sce) {
         "not_connected" : "Not Connected",        
         "remove_account_warning" : "You are about to remove this account from your wallet! (You can always restore this account in future by going to Options > Import)",
         "yes_remove_it" : "Yes, remove it!",
-        "originate_warning" : "Creating a new account incurs a fee of ~0.260XTZ. Do you want to continue?)",
+        "originate_warning" : "Creating a new account incurs a fee of 0.26ꜩ. Do you want to continue?)",
         "yes_continue" : "Yes, continue!",
         "new_account_originated" : "Your new account has been originated - this may take a few minutes to be included on the blockchain",
         "origination_error" : "There was an error adding account. Please ensure your main account has funds available",
@@ -211,8 +211,8 @@ app.service('Lang', ["$sce", function($sce) {
         "import_kt_address_info" : "We have found $$ KT1 address(es) linked to your public key - would you like to import them now? (You can also manually import these by going to Options > Import)",
         "yes_import_them" : "Yes, import them!",
         "ico_restore_success" : "You have successfully restored your ICO wallet. If you have just activated your account, please note that this may take some time to show.",
-        "transaction_confirm_info" : "You are about to send $$XTZ to $$ - this transaction is irreversible",
-        "transaction_confirm_lowtz" : "You are sending to an empty implicity (tz) account - this will incur an additional fee of 0.257XTZ. Do you want to continue?",
+        "transaction_confirm_info" : "You are about to send $$ꜩ to $$ - this transaction is irreversible",
+        "transaction_confirm_lowtz" : "You are sending to an empty implicit (tz) account - this will incur an additional fee of 0.257ꜩ. Do you want to continue?",
         "extra_fee" : "Additional fees!",
       }
 

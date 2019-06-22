@@ -107,7 +107,8 @@ app
     "PtCJ7pwo" : "Betanet_v1",
     "ProtoALp" : "Zeronet",
     "PsYLVpVv" : "Mainnet",
-    "PsddFKi3" : "Mainnet_003"
+    "PsddFKi3" : "Mainnet_003",
+    "Pt24m4xi" : "Mainnet_004"
   }
   
   if (!ss || !ss.ensk || typeof Storage.keys.sk == 'undefined'){
@@ -128,7 +129,7 @@ app
   $scope.fee = 1420;
   $scope.customFee = 1420;
   $scope.advancedOptions = false;
-  $scope.gas_limit = 10300;
+  $scope.gas_limit = 10600;
   $scope.storage_limit = 300;
   $scope.parameters = '';
   $scope.delegateType = 'undelegated';
@@ -489,6 +490,8 @@ app
 						},
 						function(isConfirm){
 							if (isConfirm){
+                var rem = ($scope.max() - $scope.amount);
+                if (rem < 0.257) $scope.amount = Math.floor(($scope.amount *1000000) - 257000)/1000000;
 								resolve();
 							}
 						});
@@ -515,6 +518,8 @@ app
     if ($scope.amount != parseFloat($scope.amount)) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_invalid_amount'), 'error');
     if (fee != parseInt(fee)) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_invalid_fee'), 'error');
     
+    if (!$scope.isRevealed && fee < 2689) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('first_operation'), 'error');
+    
 		var check = checkAddress($scope.toaddress);
 		check.then(function(){
 			SweetAlert.swal({
@@ -537,7 +542,7 @@ app
 					if ($scope.parameters){
 						var op = window.eztz.contract.send($scope.toaddress, $scope.accounts[$scope.account].address, keys, $scope.amount, $scope.parameters, fee, $scope.gas_limit, $scope.storage_limit);
 					} else {
-						var op = window.eztz.rpc.transfer($scope.accounts[$scope.account].address, keys, $scope.toaddress, $scope.amount, fee, false, $scope.gas_limit, $scope.storage_limit);
+						var op = window.eztz.rpc.transfer($scope.accounts[$scope.account].address, keys, $scope.toaddress, $scope.amount, fee, false, $scope.gas_limit, $scope.storage_limit, 0);
 					}
 					
 					var cancelled = false;
@@ -567,7 +572,9 @@ app
 									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed') + " " + "Trezor device error", 'error');
 								} else if (typeof r.errors != 'undefined'){
 									ee = r.errors[0].id.split(".").pop();
-									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed') + " " + r.error + ": Error (" + ee + ")", 'error');
+									SweetAlert.swal(Lang.translate('uh_oh'), r.error + ": " + ee, 'error');
+								} else if (typeof r == 'string') {
+									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed') + " - " + r, 'error');
 								} else {
 									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed2'), 'error');
 								}
@@ -645,7 +652,7 @@ app
           pkh : $scope.accounts[0].address,
         };
         if ($scope.type != "encrypted") keys.sk = false;
-        var op = window.eztz.rpc.account(keys, 0, true, true, false, (window.eztz.node.isZeronet ? 100000 : 1400))
+        var op = window.eztz.rpc.account(keys, 0, true, true, false, (window.eztz.node.isZeronet ? 100000 : 1731))
         
         var cancelled = false;
         if ($scope.type != "encrypted"){
