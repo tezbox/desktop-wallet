@@ -133,6 +133,8 @@ app
   if (!ss || !ss.ensk || Storage.keys.length == 0){
      return $location.path('/new');
   }
+    $scope.version = window.TEZBOX_VERSION;
+
   $scope.currentAccount = ss.account;
   $scope.mainAccounts = ss.accounts;
 	$scope.isRevealed = false;
@@ -150,10 +152,10 @@ app
   $scope.tt = $scope.accounts[$scope.account].title;
   $scope.transactions = [];
   $scope.amount = 0;
-  $scope.fee = 1420;
-  $scope.customFee = 1420;
+  $scope.fee = 2500;
+  $scope.customFee = 2500;
   $scope.advancedOptions = false;
-  $scope.gas_limit = 10600;
+  $scope.gas_limit = 18000;
   $scope.storage_limit = 300;
   $scope.parameters = '';
   $scope.delegateType = 'undelegated';
@@ -214,14 +216,17 @@ app
   var refreshTransactions = function(){
     var maxTxs = 20;
     //$http.get("https://api1.tzscan.io/v1/operations/"+$scope.accounts[$scope.account].address+"?type=Transaction&p=0&number="+ (maxTxs+1)).then(function(r){
-    $http.get("https://mystique.tzkt.io/v1/operations/"+$scope.accounts[$scope.account].address+"?type=Transaction&p=0&number="+ (maxTxs+1)).then(function(r){
+    //$http.get("https://tzsimple.tulip.tools/v3/operations/"+$scope.accounts[0].address+"?type=transaction").then(function(r){
+
+    $http.get("https://mystique.tzkt.io/v3/operations/"+$scope.accounts[$scope.account].address+"?type=Transaction").then(function(r){
       if (r.status == 200 && r.data.length > 0){
         if (r.data.length > maxTxs) {
-          r.data = r.data.slice(0, maxTxs);
+          r.data = r.data.slice(-maxTxs);
           $scope.moreTxs = true;
         } else {
           $scope.moreTxs = false;
         }
+        r.data = r.data.reverse();
         var txs = [];
         for(var i = 0; i < r.data.length; i++){
           for(var j = 0; j < r.data[i].type.operations.length; j++){
@@ -414,14 +419,17 @@ app
     Storage.setStore(ss);
     $scope.refresh();
   };   
+    
+  $scope.sideTog = function(){
+    window.toggleSide();
+  }
   $scope.import = function(){
     if (!$scope.kt1) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_kt1_address'), 'error');
-    for(var i = 0; i < $scope.accounts.length; i++){
-      if ($scope.accounts[i].address == $scope.kt1) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_kt1_linked'), 'error');
-    }
+
     window.showLoader();
     
-    window.eztz.node.query("/chains/main/blocks/head/context/contracts/"+$scope.kt1+"/manager").then(function(r){
+    window.eztz.node.query("/chains/main/blocks/head/context/contracts/"+$scope.kt1).then(function(r){
+      r = r.script.storage.string;
       if (r != $scope.accounts[0].address) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_kt1_manager'), 'error');
       $scope.$apply(function(){
         $scope.accounts.push(
@@ -439,10 +447,8 @@ app
         $scope.kt1 = '';
         window.hideLoader();
       })
-    }).catch(function(r){
-      window.hideLoader();
-      SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_importing'), 'error');
-    });
+      return true;
+    })
   };   
   $scope.remove = function(){
     if ($scope.account === 0) {
@@ -508,18 +514,20 @@ app
         usd : Lang.translate('loading'),
         raw_balance : Lang.translate('loading'),
     };
-      window.eztz.rpc.getDelegate($scope.accounts[$scope.account].address).then(function(r){
-        $scope.$apply(function(){
-          $scope.dd = r;
-          if ($scope.delegates.keys.indexOf($scope.dd) >= 0){
-            $scope.delegateType = $scope.dd;
-          } else if (!$scope.dd){
-            $scope.delegateType = 'undelegated';
-            $scope.dd = '';
-          } else
-            $scope.delegateType = '';
-        });
+    $scope.delegateType = 'undelegated';
+    $scope.dd = '';
+    window.eztz.rpc.getDelegate($scope.accounts[$scope.account].address).then(function(r){
+      $scope.$apply(function(){
+        $scope.dd = r;
+        if ($scope.delegates.keys.indexOf($scope.dd) >= 0){
+          $scope.delegateType = $scope.dd;
+        } else if (!$scope.dd){
+          $scope.delegateType = 'undelegated';
+          $scope.dd = '';
+        } else
+          $scope.delegateType = '';
       });
+    }).catch();
     refreshTransactions();
     refreshBalance();
   }
@@ -534,6 +542,7 @@ app
         usd : Lang.translate('loading'),
         raw_balance : Lang.translate('loading'),
     };
+    if ($scope.account == 0){
       window.eztz.rpc.getDelegate($scope.accounts[$scope.account].address).then(function(r){
         $scope.$apply(function(){
           $scope.dd = r;
@@ -546,6 +555,7 @@ app
             $scope.delegateType = '';
         });
       });
+    }
     refreshTransactions();
     refreshBalance();
   }
@@ -558,8 +568,8 @@ app
   };
   $scope.clear = function(){
     $scope.amount = 0;
-    $scope.customFee = 1420;
-    $scope.fee = 1420;
+    $scope.customFee = 2500;
+    $scope.fee = 2500;
     $scope.toaddress = '';
     $scope.parameters = '';
     $scope.showAccounts = false;
@@ -601,6 +611,10 @@ app
 	}
   //on-chain functions
   $scope.send = function(){
+    var ktsend = false;
+    if ($scope.accounts[$scope.account].address.substr(0,1) == "K") {
+      var ktsend = true;      
+    }
     var fee = ($scope.showCustom ? $scope.customFee : $scope.fee);
     if (!$scope.toaddress || ($scope.toaddress.substring(0, 2) !=  "tz" && $scope.toaddress.substring(0, 3) !=  "KT1")) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_valid_destinaton'), 'error');
     if ($scope.toaddress == $scope.accounts[$scope.account].address) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_send_self'));
@@ -610,7 +624,16 @@ app
     if ($scope.amount != parseFloat($scope.amount)) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_invalid_amount'), 'error');
     if (fee != parseInt(fee)) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_invalid_fee'), 'error');
     
-    if (!$scope.isRevealed && fee < 2689) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('first_operation'), 'error');
+    var sendParams = false;
+    if (!ktsend){
+      if (!$scope.isRevealed && fee < 2689) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('first_operation'), 'error');
+      if ($scope.parameters){
+        sendParams = $scope.parameters;
+      }
+    } else {
+       if ($scope.parameters) return SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('error_param_send'), 'error');
+       sendParams = window.managerOps.transfer($scope.toaddress, $scope.amount);
+    }
     
 		var check = checkAddress($scope.toaddress);
 		check.then(function(){
@@ -628,14 +651,15 @@ app
 					var keys = {
 						sk : Storage.keys[$scope.currentAccount].sk,
 						pk : Storage.keys[$scope.currentAccount].pk,
-						pkh : $scope.accounts[$scope.account].address,
+						pkh : Storage.keys[$scope.currentAccount].pk
 					};
 					if ($scope.type != "encrypted") keys.sk = false;
-					if ($scope.parameters){
-						var op = window.eztz.contract.send($scope.toaddress, $scope.accounts[$scope.account].address, keys, $scope.amount, $scope.parameters, fee, $scope.gas_limit, $scope.storage_limit);
-					} else {
-						var op = window.eztz.rpc.transfer($scope.accounts[$scope.account].address, keys, $scope.toaddress, $scope.amount, fee, false, $scope.gas_limit, $scope.storage_limit, 0);
-					}
+          
+          if (!ktsend){
+            var op = window.eztz.rpc.transfer($scope.accounts[$scope.account].address, keys, $scope.toaddress, $scope.amount, fee, sendParams, $scope.gas_limit, $scope.storage_limit, 0);
+          } else {
+            var op = window.eztz.rpc.transfer($scope.accounts[0].address, keys, $scope.accounts[$scope.account].address, 0, fee, sendParams, $scope.gas_limit, $scope.storage_limit, 0);
+          }
 					
 					var cancelled = false;
 					if ($scope.type != "encrypted"){
@@ -652,6 +676,7 @@ app
 							}
 						});
 					}).catch(function(r){
+            console.log("SEND ERROR", r);
 						$scope.$apply(function(){
 							if (!cancelled){
 								window.hideLoader();
@@ -663,7 +688,7 @@ app
 								} else if (r == "TREZOR_ERROR") {
 									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed') + " " + "Trezor device error", 'error');
 								} else if (typeof r.errors != 'undefined'){
-									ee = r.errors[0].id.split(".").pop();
+									ee = r.errors[0].id.substr(19);//split(".").pop();
 									SweetAlert.swal(Lang.translate('uh_oh'), r.error + ": " + ee, 'error');
 								} else if (typeof r == 'string') {
 									SweetAlert.swal(Lang.translate('uh_oh'), Lang.translate('operation_failed') + " - " + r, 'error');
@@ -708,7 +733,7 @@ app
           window.hideLoader();
           if (!cancelled){
             SweetAlert.swal(Lang.translate('awesome'), Lang.translate('delegation_success'), "success");
-            $scope.fee = 1420;
+            $scope.fee = 2500;
           }
         });
       }).catch(function(r){
@@ -801,9 +826,9 @@ app
   //init
   if (Storage.restored){
     window.showLoader();
-    $http.get("https://api1.tzscan.io/v1/operations/"+$scope.accounts[0].address+"?type=Origination").then(function(r){
+    //$http.get("https://api1.tzscan.io/v1/operations/"+$scope.accounts[0].address+"?type=Origination").then(function(r){
+    $http.get("https://tzsimple.tulip.tools/v3/operations/"+$scope.accounts[0].address+"?type=origination").then(function(r){
     //$http.get("https://mystique.tzkt.io/v1/operations/"+$scope.accounts[0].address+"?type=Origination").then(function(r){
-      console.log(r);
       window.hideLoader();
       if (r.status == 200 && r.data.length > 0){
         SweetAlert.swal({
@@ -821,7 +846,7 @@ app
                 $scope.accounts.push(
                   {
                     title : "Contract " + ($scope.accounts.length),
-                    address : r.data[i].type.operations[j].tz1.tz
+                    address : eztz.contract.hash(r.data[i].hash, 0)
                   }
                 );
               }
@@ -1042,8 +1067,6 @@ app
         });
         
         ss = Storage.data;
-        console.log(ss);
-        console.log(Storage.keys);
         if (Storage.keys.length <= 1){
           window.hideLoader();
           return $location.path("/encrypt");

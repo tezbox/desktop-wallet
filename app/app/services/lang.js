@@ -231,6 +231,9 @@ app.service('Lang', ["$sce", function($sce) {
         "create_tezbox" : "Create New Account",
         "hd_path" : "Hardware Wallet HD Path",
         "hd_path_info" : "Your HD path is the unique identifier to access your account on your Hardware Wallet - this is not the same as the private seed/key, which is also needed and should be kept somewhere secure.",
+        "error_send_to_tz" : "KT addresses can only be used to send to tz* addresses at the moment",
+        "error_param_send" : "KT addresses can't send custom parameters currently",
+        "kt_send_fees" : "Sending from KT addresses require additional gas and a higher fee. Please use around 30k gas and a Medium fee.",
       }
 
     },

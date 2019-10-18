@@ -29,10 +29,10 @@
   <div class="mainBody">
     <div class="container">
       <div class="side-min" style="display:none;">
-        <a class="toggleArrow" onclick="toggleSide()"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+        <a class="toggleArrow" ng-click="sideTog()"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
       </div>
       <div class="side">
-        <a class="toggleArrow" onclick="toggleSide()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a>
+        <a class="toggleArrow" ng-click="sideTog()"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a>
         <h3 style="">{{translate("my_accounts")}}</h3>
         <div class="accountsContainer">
           <ul class="myAccounts">
@@ -45,9 +45,11 @@
             {{block.net}}<br />
             {{translate("level")}} {{block.level}}<br />
             <strong>{{block.proto}}</strong><br />
-            {{setting.rpc}}
+            {{setting.rpc}}<br />
+            v{{version}}
           </p>
           <p class="copy text-center"><a href="https://tezbox.com/disclaimer.html" target="_blank">{{translate("disclaimer")}}</a> - <a href="https://tezbox.com/terms.html" target="_blank">{{translate("terms")}}</a> - <a href="https://tezbox.com/privacy.html" target="_blank">{{translate("privacy")}}</a></p>
+         
         </div>
       </div>
       <div class="mainArea">
@@ -71,7 +73,7 @@
           </div>
           <div class="col-md-3 text-center">
             <h1 class="balance">{{accountDetails.balance}} <a ng-click="refresh()"><i class="fas fa-sync"></i></a></h1>
-            <a class="btn btn-secondary" target="_blank" href="https://tezos.id/{{accounts[account].address}}">{{translate("view_on_tezosid")}} <i class="fas fa-external-link-alt"></i></a></strong>
+            <a class="btn btn-secondary" target="_blank" href="https://tzstats.com/account/{{accounts[account].address}}">View on tzstats <i class="fas fa-external-link-alt"></i></a></strong>
           </div>
           <div class="col-md-3 text-right">
             <qrcode style="margin:25px;" error-correction-level="H" size="128" data="{{accounts[account].address}}" color="#FFF" background="#1d1d1d"></qrcode>
@@ -127,8 +129,11 @@
               </div>
               <div role="tabpanel" class="tab-pane" id="send">
 								<div class="row">
-                  <div class="col-md-12" ng-show="!isRevealed">
+                  <div class="col-md-12" ng-show="!isRevealed && account == 0">
                     <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate("first_operation")}}</strong></p>
+                  </div>
+                  <div class="col-lg-8 col-md-12" ng-show="account != 0">
+                    <p class="alert alert-info"><i class="leftIcon fas fa-exclamation-circle"></i><strong>{{translate("kt_send_fees")}}</strong><br /><br /><a ng-click="fee=5000;gas_limit=30000;" class="">Update Fees</a></p>
                   </div>
                 </div>
                 <div class="row">
@@ -154,7 +159,7 @@
                       <label>{{translate("fee")}} μꜩ <span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                       <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
                       <select ng-show="!showCustom" class="form-control" ng-model="fee" number-select>
-                        <option value="1420">{{translate("low")}} - 1420μꜩ</option>
+                        <option value="2500">{{translate("low")}} - 2500μꜩ</option>
                         <option value="5000">{{translate("medium")}} - 5000μꜩ</option>
                         <option value="30000">{{translate("high")}} - 30000μꜩ</option>
                       </select>
@@ -235,7 +240,7 @@
                           <label>{{translate("fee")}} μꜩ<span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                           <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
                           <select ng-show="!showCustom" class="form-control" ng-model="fee" number-select>
-                          <option value="1420">{{translate("low")}} - 1420μꜩ</option>
+                          <option value="2500">{{translate("low")}} - 2500μꜩ</option>
                           <option value="5000">{{translate("medium")}} - 5000μꜩ</option>
                           <option value="30000">{{translate("high")}} - 30000μꜩ</option>
                         </select>
@@ -290,7 +295,7 @@
                           <label>{{translate("fee")}} μꜩ<span style="color:red;">*</span> <i class="leftIcon fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="{{translate('fee_tooltip')}}" tooltip></i><a ng-show="!showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = fee; showCustom = true">{{translate("custom_fee")}}</a><a ng-show="showCustom" style="position: absolute;right: 15px;cursor:pointer;" ng-click="customFee = 0; showCustom = false">{{translate("fee_options")}}</a></label>
                           <input ng-show="showCustom" type="number" class="form-control" ng-model="customFee">
                           <select ng-show="!showCustom" class="form-control" ng-model="fee" number-select>
-                          <option value="1420">{{translate("low")}} - 1420μꜩ</option>
+                          <option value="2500">{{translate("low")}} - 2500μꜩ</option>
                           <option value="5000">{{translate("medium")}} - 5000μꜩ</option>
                           <option value="30000">{{translate("high")}} - 30000μꜩ</option>
                         </select>
