@@ -96,7 +96,7 @@ app.service('Storage', function() {
       if (typeof k != 'undefined') r.keys = k;
       if (typeof p != 'undefined') r.password = p;
       if (typeof r.data.version == 'undefined') r.data.version = r.storageVersion;
-      localStorage.setItem('tbstore', JSON.stringify(r.data));
+      window.store.set('tbstore', r.data);
   };
   r.clearStore = function(){
     r.keys = [];
