@@ -203,13 +203,34 @@ position: absolute;
   width:300px;
   background-color:#EEF0F6!important;
   padding-bottom:100px;
+  overflow: hidden;
 }
 .mainBody>.container>.side .bottom{
-  position:absolute;
-  bottom:30px;
-  font-size:12px;
-  padding-left: 35px;
-  padding-right: 35px;
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+    padding-bottom: 20px;
+    font-size: 12px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 19px;
+    background-color: #f5f5f5;
+}
+.toggleArrow {
+    position: absolute;
+    right: 13px;
+    font-size: 25px;
+    top: 25px;
+}
+.side-min{
+position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 100px;
+    overflow: hidden;
+    z-index: 10000;
 }
 .myAccounts li.account a span{
   display: block;
@@ -285,10 +306,109 @@ position: absolute;
   line-height:40px;
 }
 .accountsContainer{
-  width:100%;
-  height:100%;
-  position: relative;
+width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+#dropdownAccounts{
+  width: 250px;
+    margin-left: 25px;
+    top: 30px;
+    left: -300px;
+}
+
+
+.myAccountsDrop li.account{
+  padding-left:15px;
+  padding-right:15px;
+}
+.myAccountsDrop li.account canvas{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  position: absolute;
+  top:12px;
+  left:0;
+}
+.myAccountsDrop li.sideButton i{
+    color: #EB1459;
+    position: absolute;
+    right: 25px;
+}
+.myAccountsDrop li a{
+  color: #EB1459!important;
+  font-size:12px;
+}
+.myAccountsDrop li.sideButton a{
+  display: block;
+  color: #1d1d1d!important;
+  border-left: 5px solid #EB1459;
+  padding-left: 30px;
+  padding-bottom: 5px;
+}
+.myAccountsDrop {
+  list-style: none;
+  padding: 0;
+}
+.myAccountsDrop:hover li{
+  opacity:.7;
+  transition: all 0.5s ease;
+}
+.myAccountsDrop li:hover {
+  opacity:1;
+  transition: all 0.5s ease;
+}
+.myAccountsDrop:hover {
+  transition: all 0.5s ease;
+}
+.myAccountsDrop li.account a span{
+  display: block;
+  color: #1d1d1d;
   overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: none;
+}
+.myAccountsDrop li.account a:hover{
+  color: #EB1459;
+}
+.myAccountsDrop li.account a{
+  position: relative;
+  padding:10px;
+  padding-left: 40px;
+  height: 50px;
+  font-size: 12px;
+  display:block;
+  text-transform: uppercase;
+}
+
+
+#managerAccount{
+  padding-left:35px;
+  padding-right:35px;
+}
+#managerAccount canvas{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+    border: 2px solid #EB1459;  position: absolute;
+  top:10px;
+  left:0;
+}
+#managerAccount span{
+  display: block;
+  color: #1d1d1d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: none;
+}
+#managerAccount{
+    position: absolute;
+    top: -22px;
+    right: 0;
+    font-size: 14px;
+    display: block;
 }
 .myAccounts li.account{
   padding-left:35px;
@@ -322,15 +442,16 @@ position: absolute;
   padding-right:35px;
 }
 .myAccounts {
-  position: absolute;
-  list-style: none;
-  padding: 0;
-  top: 0;
-  left: 0;
-  right: -17px;
-  bottom: 100px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+position: absolute;
+    list-style: none;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: -17px;
+    bottom: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 }
 .transition{
   transition: all 0.5s ease;
@@ -343,6 +464,27 @@ position: absolute;
   opacity:1;
   transition: all 0.5s ease;
 }
+.myAccounts li.account a span{
+  display: block;
+  color: #1d1d1d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: none;
+}
+.myAccounts li.account a:hover{
+  color: #EB1459;
+}
+.myAccounts li.account a{
+  position: relative;
+  padding:10px;
+  padding-left: 60px;
+  height: 70px;
+  font-size: 14px;
+  display:block;
+  text-transform: uppercase;
+}
+
+
 .mainTabs{
   padding-left: 20px;
   margin: 0 -15px;
@@ -555,8 +697,6 @@ h2.med-title {
 .header a {
   color: #1d1d1d!important;
   font-size: 30px;
-  margin-left: 20px;
-  opacity:.5;
 }
 .header a:hover {
   color: #EB1459!important;

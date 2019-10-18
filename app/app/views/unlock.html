@@ -20,7 +20,9 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="exampleInputEmail1">{{translate('enter_password')}}</label>
-              <input autocomplete=false type="password" class="form-control" ng-model="password">
+							<form ng-submit="unlock()">
+								<input autofocus autocomplete=false type="password" class="form-control" ng-model="password">
+							</form>
             </div>
           </div>
           <div class="col-md-10 col-md-offset-1 mt-20">

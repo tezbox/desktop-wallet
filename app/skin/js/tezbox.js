@@ -32,3 +32,21 @@ function isJsonString(str) {
 	}
 	return true;
 }
+
+var open = true;
+function toggleSide(){
+  if (open){
+    $('.side').toggle();
+  } else{
+    $('.side-min').fadeOut();
+  }
+  $( ".mainArea" ).animate({
+    left: ( open ? "0" : "300")
+  }, 500, function() {
+    if (open){
+      $('.side').toggle();
+    } else
+      $('.side-min').fadeIn();
+  });
+  open = !open;
+}

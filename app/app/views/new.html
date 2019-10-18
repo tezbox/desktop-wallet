@@ -19,16 +19,26 @@
       </div>
       <div  class="row">
         <div class="col-md-6 col-md-offset-3">
-          <a ng-click="restore()" class="btn btn-secondary btn-block">{{translate("restore_tezbox")}}</a>
+          <a ng-click="restore()" class="btn btn-secondary btn-block">{{translate("restore_tezbox2")}}</a>
         </div>
       </div>
       <div  class="row text-center mt-20">
         <div class="col-md-10 col-md-offset-1">
-          <p>{{translate("link_hardware_wallet")}}<br /> <a ng-click="link()" class="">{{translate("link")}}</a> or <a target="_blank" href="https://tezbox.com/buy-hardware-wallet.html" class="">Get yours Today!</a></p>
+          <p><strong>{{translate("link_hardware_wallet")}}</strong></p>
+        </div>
+      </div>
+      <div  class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <a ng-click="link()" class="btn btn-secondary btn-block">{{translate("link_tezbox")}}</a>
+        </div>
+      </div>
+      <div  class="row text-center">
+        <div class="col-md-10 col-md-offset-1">
           <p>
             <img style="height: 20px;margin-right:40px;" src="skin/images/ledger-logo.svg">
             <img style="height: 20px;" src="skin/images/trezor-logo.svg">
           </p>
+          <p><a target="_blank" href="https://tezbox.com/buy-hardware-wallet.html" class="">{{translate("recommend_hardware")}}</a></p>
         </div>
       </div>
       <div  class="row text-center mt-50">
